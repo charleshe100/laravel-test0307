@@ -62,14 +62,18 @@
                             {{ $item->name }}
                         </td>
                         <td>
-                            {{ $item->mobile->student_id }}
+                            {{ $item->mobileRelation->student_id }}
                         </td>
                         <td>
-                            {{ $item->mobile->mobile }}
+                            {{ $item->mobileRelation->mobile }}
                         </td>
                         <td>
-                            <a href="{{ route('students.edit', ['student' => $item->id ]) }}">Edit</a> &nbsp;&nbsp;&nbsp;
-                            <a href="http://">Del</a>
+                            <form action="{{ route('students.destroy', ['student' => $item->id ]) }}" method="post">
+                                @method('DELETE')  
+                                @csrf 
+                            <a class="btn btn-warning" href="{{ route('students.edit', ['student' => $item->id ]) }}">Edit</a> &nbsp;&nbsp;&nbsp;
+                            <button type="sumit" class="btn btn-danger">Del</button>
+                            </form>
                         </td>
                     </tr>
                 @endforeach
