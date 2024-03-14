@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Student;
 use App\Models\Mobile;
+use App\Models\Loves;
 use Illuminate\Http\Request;
 
 class StudentController extends Controller
@@ -14,9 +15,23 @@ class StudentController extends Controller
     public function index()
     {
         $data = Student::get();
-        $data = Student::with('mobileRelation')->get();
-        //用 with 關聯
-        // dd($data);
+        $data = Student::with('mobileRelation')->with('loveRelations')->get();
+        // foreach ($data as $key => $value) {
+            // dd($value);
+            // $data[0]
+            //loveRelations 1
+            //fetchAll
+            //foreach
+            // echo ("$value->name<br>");
+            // $data[1]
+            //loveRelations 3
+            //fetchAll
+            //foreach
+            
+        //     foreach ($value->loveRelations as $key2 => $value2) {
+        //         // echo ("&nbsp;&nbsp;&nbsp;&nbsp;$value2->love <br>");
+        //     }
+        // }
         return view('student.index', ['data' => $data]);
     }
 
@@ -35,6 +50,8 @@ class StudentController extends Controller
     {
         // dd($request);
         $input = $request->except('_token');
+        $loves = $input['love'];
+        $loveArr = explode(",", $loves);
 
         // student 第一張資料表，總表
         $data = new Student;
@@ -47,6 +64,15 @@ class StudentController extends Controller
         $item->student_id = $id;
         $item->mobile = $input['mobile'];
         $item->save();
+
+        // love 第三張資料表，子表與第一張資料表關聯
+        $id = $data->id;
+        foreach ($loveArr as $key => $value) {
+            $itemLove = new Loves;
+            $itemLove->student_id = $id;
+            $itemLove->love = $value;
+            $itemLove->save();
+        }
 
          return redirect()->route('students.index');
     }
@@ -66,8 +92,25 @@ class StudentController extends Controller
     {
         // dd("$student edit");
         $id = $student->id;
-        $data = Student::where('id', $id)->with('mobileRelation')->first();
+        $data = Student::where('id', $id)->with('mobileRelation')->with('loveRelations')->first();
         // dd($data);
+        // $data['loves'] = 'php,laravel,js';
+        
+        //relation to arry
+        $loveArr = [];
+        foreach ($data->loveRelations as $key => $value) {
+            array_push($loveArr, $value->love);
+        }
+        // dd($loveArr);
+
+        // array to string
+        $loves = implode(",", $loveArr);
+        // dd($loves);
+
+        // data['loves']
+        $data['loves'] = $loves;
+        // dd($data);
+
         return view('student.edit', ['data' => $data]);
     }
 
@@ -79,6 +122,8 @@ class StudentController extends Controller
         // $input = $request->all();
         // dd($input); //先用all與dd找出要排除的項目
         $input = $request->except('_token','_method');
+        $loves = $input['love'];
+        $loveArr = explode(",", $loves);
 
         // update student 第一張資料表，總表
         $id=$student->id;
@@ -99,6 +144,18 @@ class StudentController extends Controller
         $item->mobile = $input['mobile'];
         $item->save();
 
+        // loves
+        // delete loves
+        Loves::where('student_id', $student->id)->delete();
+
+        // add love
+        foreach ($loveArr as $key => $value) {
+            $itemLove = new Loves;
+            $itemLove->student_id = $id;
+            $itemLove->love = $value;
+            $itemLove->save();
+        }
+
         return redirect()->route('students.index');
     }
 
@@ -107,11 +164,15 @@ class StudentController extends Controller
      */
     public function destroy(Student $student)
     {
+        //刪 love 資料
+        Loves::where('student_id',$student->id)->delete();
+
+        //刪 mobile 資料
+        Mobile::where('student_id',$student->id)->delete();
+
         //刪 student 資料
         Student::where('id',$student->id)->delete();
         
-        //刪 mobile 資料
-        Mobile::where('student_id',$student->id)->delete();
         
         return redirect()->route('students.index');
     }

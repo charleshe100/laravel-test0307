@@ -51,6 +51,14 @@
             </div>
         </div>
         <div class="row my-3">
+            <div class="col"><h3>love</h3><h4>ex:php,lavarel,js</h4></div>
+        </div>
+        <div class="row my-3">
+            <div class="col">
+                <input type="text" name="love" id="love" class="form-control">
+            </div>
+        </div>
+        <div class="row my-3">
             <div class="col">
                 <button type="submit" class="btn btn-primary">送出</button>
             </div>

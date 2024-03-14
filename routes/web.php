@@ -37,5 +37,8 @@ Route::get('/child', function () {
 // students 學生
 Route::resource('students', StudentController::class);
 
-// mobiles 學生
+// mobiles 手機
 Route::resource('mobiles', MobileController::class);
+
+// loves 愛好
+Route::resource('loves', MobileController::class);

@@ -35,23 +35,31 @@
         <div class="container mt-3">
             <h2>Student Edit</h2>
             <p>Lorem ipsum dolor sit amet.</p>
-            <div class="row">
-                <div class="col ">name</div>
+            <div class="row my-3">
+                <div class="col "><h3>name</h3></div>
             </div>
-            <div class="row">
+            <div class="row my-3">
                 <div class="col">
                     <input type="text" name="name" id="" class="form-control" value="{{$data->name}}">
                 </div>
             </div>
-            <div class="row">
-                <div class="col ">mobile</div>
+            <div class="row my-3">
+                <div class="col "><h3>mobile</h3></div>
             </div>
-            <div class="row">
+            <div class="row my-3">
                 <div class="col">
                     <input type="text" name="mobile" id="" class="form-control" value="{{$data->mobileRelation->mobile}}">
                 </div>
             </div>
-            <div class="row mt-3">
+            <div class="row my-3">
+                <div class="col "><h3>love</h3></div>
+            </div>
+            <div class="row my-3">
+                <div class="col">
+                    <input type="text" name="love" id="" class="form-control" value="{{$data->loves}}">
+                </div>
+            </div>
+            <div class="row my-3">
                 <div class="col">
                     <div class="d-grid gap-2">
                         <button class="btn btn-primary" type="submit">Button</button>

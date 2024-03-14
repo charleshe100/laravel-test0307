@@ -40,32 +40,43 @@
         <h2>Student List</h2>
         <p>Lorem ipsum dolor sit amet.</p>
         <div class="text-end">
-            <a href="{{ route('students.create') }}">Add</a>
+            <a href="{{ route('students.create') }}" class="btn btn-primary">Add</a>
         </div>
         <table class="table table-striped">
             <thead>
                 <tr>
                     <th>id</th>
                     <th>name</th>
-                    <th>mobile_student_id</th>
-                    <th>mobile_mobile</th>
+                    <th>mobile</th>
+                    <th>love</th>
                     <th>operate</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach ($data as $item)
+                @foreach ($data as $key => $item)
                     <tr>
                         <td>
-                            {{ $item->id }}
+                            {{-- {{ $item->id }} --}}
+                            {{$key+1}}
                         </td>
                         <td>
                             {{ $item->name }}
                         </td>
                         <td>
-                            {{ $item->mobileRelation->student_id }}
+                            {{ $item->mobileRelation->mobile ?? '' }}
                         </td>
                         <td>
-                            {{ $item->mobileRelation->mobile }}
+                            @php
+                            //dd($item->loveRelations[0]); //不清楚有什麼就dd，[0]就是第一組
+                                // foreach ($item->loveRelations as $key => $value) {
+                                //     echo "$value->love<br>";
+                                // }
+                            @endphp
+
+                            @foreach ($item->loveRelations as $value)
+                                {{"$value->love"}}
+                                <br>
+                            @endforeach
                         </td>
                         <td>
                             <form action="{{ route('students.destroy', ['student' => $item->id ]) }}" method="post">
